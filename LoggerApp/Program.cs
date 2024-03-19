@@ -9,18 +9,42 @@ namespace LoggerApp
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
-            Log("Error", "SOmething");
+            logType Comment = new logType("Comment","white");
+            logType Warning = new logType("Warning","yellow");
+            logType Error = new logType("Error","red");
+
+            Log(Warning, "issue to be wary of");
+            Log(Comment, "interesting fact");
+            Log(Error, "divide by zero");
+            
+            Console.ReadKey();
         }
 
-        public static void Log(string statusType,  string message)
+        public static void Log(logType statusType,  string message)
         {
+
             Logger log = Logger.Instance(statusType, message);
-            Console.WriteLine(log);
+            Console.WriteLine(log.StatusType.Name + ": " + log.Message );
+
         }
     }
 
+    public class logType
+    {
+        public logType(string name, string fontColor) 
+        {
+            Name =  name;
+            FontColor = fontColor;
+        }
+        public string Name { get;  set; }
+        public string FontColor { get;  set; }
+
+      
+        
+    }
     public class Logger
     {
         static Logger _instance;
@@ -29,9 +53,9 @@ namespace LoggerApp
 
         private static readonly object _lock = new object();
 
-        public static Logger Instance(string statusType, string message)
+        public static Logger Instance(logType statusType, string message)
         {
-            if (_instance == null)
+            if (_instance == null )
             {
                 lock (_lock)
                 {
@@ -45,7 +69,7 @@ namespace LoggerApp
             }
             return _instance;
         }
-        public string StatusType { get; set; }
+        public logType StatusType { get; set; }
         public string Message { get; set; }
     }
 }
