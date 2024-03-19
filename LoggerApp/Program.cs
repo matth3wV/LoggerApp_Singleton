@@ -11,7 +11,13 @@ namespace LoggerApp
     {
         static void Main(string[] args)
         {
-            Logger e1 = Logger.GetLogger();
+            Log("Error", "SOmething");
+        }
+
+        public static void Log(string statusType,  string message)
+        {
+            Logger log = Logger.Instance(statusType, message);
+            Console.WriteLine(log);
         }
     }
 
@@ -23,7 +29,7 @@ namespace LoggerApp
 
         private static readonly object _lock = new object();
 
-        public static Logger Instance(string statusType, string value)
+        public static Logger Instance(string statusType, string message)
         {
             if (_instance == null)
             {
@@ -33,13 +39,13 @@ namespace LoggerApp
                     {
                         _instance = new Logger();
                         _instance.StatusType = statusType;
-                        _instance.Value = value;
+                        _instance.Message = message;
                     }
                 }
             }
             return _instance;
         }
         public string StatusType { get; set; }
-        public string Value { get; set; }
+        public string Message { get; set; }
     }
 }
