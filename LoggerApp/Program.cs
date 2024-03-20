@@ -12,14 +12,17 @@ namespace LoggerApp
 
         static void Main(string[] args)
         {
-            logType Comment = new logType("Comment","white");
-            logType Warning = new logType("Warning","yellow");
-            logType Error = new logType("Error","red");
+            logType Comment = new logType("Comment","White");
+            logType Warning = new logType("Warning","Yellow");
+            logType Error = new logType("Error","Red");
 
             Log(Warning, "issue to be wary of");
             Log(Comment, "interesting fact");
+            Log(Warning, "another issue");
+            Log(Comment, "another interesting fact");
             Log(Error, "divide by zero");
-            
+            Log(Warning, "something else");
+
             Console.ReadKey();
         }
 
@@ -27,7 +30,15 @@ namespace LoggerApp
         {
 
             Logger log = Logger.Instance(statusType, message);
+            string colorName = log.StatusType.FontColor;
+            Type type = typeof(ConsoleColor);
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(type, colorName);
             Console.WriteLine(log.StatusType.Name + ": " + log.Message );
+            if (log.StatusType.Name == "Error")
+            {
+                Console.ReadKey();
+                Environment.Exit(0 );
+            }
 
         }
     }
@@ -66,6 +77,11 @@ namespace LoggerApp
                         _instance.Message = message;
                     }
                 }
+            }
+            else
+            {
+                _instance.StatusType = statusType;
+                _instance.Message = message;
             }
             return _instance;
         }
